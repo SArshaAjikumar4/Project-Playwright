@@ -1,0 +1,195 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: PurchasePage.spec.js >> Purchase a Monitor
+- Location: tests\PurchasePage.spec.js:57:9
+
+# Error details
+
+```
+ReferenceError: Detailsdata is not defined
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=f2e1]:
+  - text:             
+  - navigation [ref=f2e2]:
+    - generic [ref=f2e3]:
+      - link "PRODUCT STORE" [ref=f2e4] [cursor=pointer]:
+        - /url: index.html
+      - list [ref=f2e7]:
+        - listitem [ref=f2e8]:
+          - link "Home (current)" [ref=f2e9] [cursor=pointer]:
+            - /url: index.html
+            - text: Home
+            - generic [ref=f2e10]: (current)
+        - listitem [ref=f2e11]:
+          - link "Contact" [ref=f2e12] [cursor=pointer]:
+            - /url: "#"
+        - listitem [ref=f2e13]:
+          - link "About us" [ref=f2e14] [cursor=pointer]:
+            - /url: "#"
+        - listitem [ref=f2e15]:
+          - link "Cart" [ref=f2e16] [cursor=pointer]:
+            - /url: cart.html
+        - listitem
+        - listitem [ref=f2e17]:
+          - link "Log out" [ref=f2e18] [cursor=pointer]:
+            - /url: "#"
+        - listitem [ref=f2e19]:
+          - link "Welcome arsha123" [ref=f2e20] [cursor=pointer]:
+            - /url: "#"
+        - listitem
+  - generic [ref=f2e22]:
+    - generic [ref=f2e25]:
+      - list [ref=f2e26]:
+        - listitem [ref=f2e27] [cursor=pointer]
+        - listitem [ref=f2e28] [cursor=pointer]
+        - listitem [ref=f2e29] [cursor=pointer]
+      - link:
+        - /url: "#myCarousel-2"
+      - link:
+        - /url: "#myCarousel-2"
+    - generic [ref=f2e32]:
+      - heading "Apple monitor 24" [level=2] [ref=f2e33]
+      - separator [ref=f2e34]
+      - heading "$400 *includes tax" [level=3] [ref=f2e35]
+      - separator [ref=f2e36]
+      - generic [ref=f2e37]:
+        - list:
+          - listitem
+        - generic [ref=f2e39]:
+          - strong [ref=f2e40]: Product description
+          - paragraph [ref=f2e41]: LED Cinema Display features a 27-inch glossy LED-backlit TFT active-matrix LCD display with IPS technology and an optimum resolution of 2560x1440. It has a 178 degree horizontal and vertical viewing angle, a "typical" brightness of 375 cd/m2, contrast ratio of 1000:1, and a 12 ms response time.
+      - separator [ref=f2e42]
+      - link "Add to cart" [active] [ref=f2e45] [cursor=pointer]:
+        - /url: "#"
+  - generic [ref=f2e47]:
+    - generic [ref=f2e50]:
+      - heading "About Us" [level=4] [ref=f2e51]
+      - paragraph [ref=f2e52]: We believe performance needs to be validated at every stage of the software development cycle and our open source compatible, massively scalable platform makes that a reality.
+    - generic [ref=f2e55]:
+      - heading "Get in Touch" [level=4] [ref=f2e56]
+      - paragraph [ref=f2e57]: "Address: 2390 El Camino Real"
+      - paragraph [ref=f2e58]: "Phone: +440 123456"
+      - paragraph [ref=f2e59]: "Email: demo@blazemeter.com"
+    - heading "PRODUCT STORE" [level=4] [ref=f2e63]
+  - contentinfo [ref=f2e65]:
+    - paragraph [ref=f2e66]: Copyright © Product Store
+```
+
+# Test source
+
+```ts
+  1   | import{test,expect} from '@playwright/test'
+  2   | import { LoginPage } from '../pages/LoginPage'
+  3   | import { PurchasePage } from '../pages/PurchasePage'
+  4   | import { AddToCartPage } from '../pages/AddToCartPage'
+  5   | import data from '../Utils/TestCredential.json'
+  6   | 
+  7   | 
+  8   | 
+  9   | 
+  10  | 
+  11  | 
+  12  |  test('Purchase a Phone',async({page})=>{
+  13  | 
+  14  |      //LOGIN
+  15  |     const validusername=data.validusername
+  16  |     const validpassword=data.validpassword
+  17  |     const loginPage=new LoginPage(page)
+  18  |     await loginPage.naviagteApplication()
+  19  |     await loginPage.loginApplication(validusername,validpassword)
+  20  |     
+  21  | 
+  22  |     //SELECT PHONE PRODUCT AND ADD TO CART And Purchase it
+  23  |     const purchasePage=new PurchasePage(page)
+  24  |    
+  25  |     await purchasePage.selectAnyPhone()
+  26  |     await purchasePage.clickAddToCarts()
+  27  |     await purchasePage.popupHandling()
+  28  | 
+  29  | 
+  30  |     //POPUP Handling
+  31  |     /*page.on('dialog',async dialog=>{
+  32  |         expect(dialog.message()).toBe('Product added.')
+  33  |         await dialog.accept()
+  34  |         const clickOk=page.locator('.col-sm-12 col-md-6 col-lg-6')
+  35  |         await clickOk.click()
+  36  | 
+  37  |     })*/
+  38  |     //Adding details
+  39  | 
+  40  |         const name=data.name
+  41  |         const country=data.country
+  42  |         const city=data.city
+  43  |         const credirtcard=data.creditcard
+  44  |         const month=data.month
+  45  |         const year=data.year
+  46  |         await purchasePage.navigateToCart()
+  47  |         await purchasePage.placeOrder()
+  48  |         await purchasePage.detailsAdding(name,country,city,credirtcard,month,year)
+  49  |         await purchasePage.Purchase()
+  50  | 
+  51  |     
+  52  | 
+  53  | 
+  54  |     })
+  55  | 
+  56  | 
+  57  |     test('Purchase a Monitor',async({page})=>{
+  58  |         //LOGIN
+  59  |     const validusername=data.validusername
+  60  |     const validpassword=data.validpassword
+  61  |     const loginPage=new LoginPage(page)
+  62  |     await loginPage.naviagteApplication()
+  63  |     await loginPage.loginApplication(validusername,validpassword)
+  64  |     
+  65  | 
+  66  |     //SELECT Monitor PRODUCT AND ADD TO CART And Purchase it
+  67  |     const purchasePage=new PurchasePage(page)
+  68  |     await purchasePage.selectAnyMonitor()
+  69  |      await purchasePage.clickAddToCarts()
+  70  | 
+  71  |     //POPUP Handling
+  72  |     page.on('dialog',async dialog=>{
+  73  |         expect(dialog.message()).toBe('Product added.')
+  74  |         await dialog.accept()
+  75  |         const clickOk=page.locator('.col-sm-12 col-md-6 col-lg-6')
+  76  |         await clickOk.click()
+  77  | 
+  78  |     })
+  79  |     //Adding details
+  80  | 
+> 81  |         const name=Detailsdata.name
+      |                    ^ ReferenceError: Detailsdata is not defined
+  82  |         const country=Detailsdata.country
+  83  |         const city=Detailsdata.city
+  84  |         const credirtcard=Detailsdata.creditcard
+  85  |         const month=Detailsdata.month
+  86  |         const year=Detailsdata.year
+  87  |         await purchasePage.navigateToCart()
+  88  |         await purchasePage.placeOrder()
+  89  |         await purchasePage.detailsAdding(name,country,city,credirtcard,month,year)
+  90  |         await purchasePage.Purchase()
+  91  | 
+  92  |     
+  93  | 
+  94  | 
+  95  |     })
+  96  |    
+  97  |     
+  98  |  
+  99  | 
+  100 | 
+  101 | 
+  102 | 
+  103 | 
+```
